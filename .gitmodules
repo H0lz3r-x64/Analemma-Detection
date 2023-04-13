@@ -1,0 +1,3 @@
+[submodule "OpenCV-Python-Utilities"]
+	path = OpenCV-Python-Utilities
+	url = https://github.com/LucaHolzerKnapp/OpenCV-Python-Utilities.git

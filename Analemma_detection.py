@@ -4,8 +4,6 @@ import cv2
 import os
 import sys
 import xlsxwriter
-
-sys.path.append("..")
 import Util
 from Util.Image import Image
 from Util.Contours import Contours
