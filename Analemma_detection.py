@@ -139,17 +139,20 @@ def write_to_excel(data: list[list[str]]):
     else:
         worksheet = workbook.worksheets()[0]
 
-
+    # write the column headers
     worksheet.write('A1', 'Date')
     worksheet.write('B1', 'X')
     worksheet.write('C1', 'Y')
 
+    # write the data in the excel file
     for i, value in enumerate(data):
         i = i + 2
         worksheet.write('A' + str(i), value[0])
         worksheet.write('B' + str(i), round(float(value[1]), 2))
         worksheet.write('C' + str(i), round(float(value[2]), 2))
         worksheet.autofit()
+
+    # close the workbook
     workbook.close()
 
 
