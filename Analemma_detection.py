@@ -2,12 +2,20 @@ import math
 import numpy as np
 import cv2
 import os
-import sys
 import xlsxwriter
-import Util
-from Util.Image import Image
-from Util.Contours import Contours
-from Util.Draw import Draw
+import importlib
+
+
+# Custom import since repository name contains hyphens
+def import_from(module, name):
+    module = __import__(module, fromlist=[name])
+    return getattr(module, name)
+
+
+Util = importlib.import_module("OpenCV-Python-Utilities")
+Image = import_from("OpenCV-Python-Utilities.Image", "Image")
+Contours = import_from("OpenCV-Python-Utilities.Contours", "Contours")
+Draw = import_from("OpenCV-Python-Utilities.Draw", "Draw")
 
 
 def main():
@@ -42,7 +50,24 @@ def main():
     write_to_excel(data)
 
 
-def find_brightest(img: np.ndarray, last_center: tuple, filename="img", radius=51) -> list:
+def find_brightest(img: np.ndarray, last_center: tuple, filename="img", radius=51) -> tuple:
+    """
+    Finds the brightest point of image (sun), displays the steps
+    and returns the center coordinates of the brightest point found.
+
+    Two methods; the minMax method and the robust method get utilized to find the brightest point.
+    They work differently but generally the minMax method is better.
+    The robust method is returned in case it didn't find anything and the distance from the minMax center
+    to the previous center is more than 50px.
+    This avoids the center to be at an entirely different location than the previous center was, which would be wrong.
+
+    :param img: source image
+    :param last_center: previous center coordinates tuple
+    :param filename: the name of the current image file. Standard "img".
+    :param radius: radius used for gaussian blur. Roughly determines the max size of the brightest point we are searching for.
+    :return: Center of brightest point | Tuple: (x, y)
+    """
+
     # reduce image size by 20px on all sides and auto converts it to gray
     img = Image.size_reduction(img, 20)
 
